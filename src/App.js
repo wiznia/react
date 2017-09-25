@@ -1,0 +1,102 @@
+import React, { Component } from 'react';
+import './styles.css';
+import PhotoGrid from './components/PhotoGrid';
+import posts from './data';
+import base from './base';
+import firebase from 'firebase';
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      posts,
+      user: null
+    }
+  }
+
+  componentWillMount() {
+    this.ref = base.syncState(`/`, {
+      context: this,
+      state: 'posts'
+    });
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({user});
+      }
+    });
+  }
+
+  async login(provider) {
+    let prov = null;
+
+    if (provider === 'facebook') {
+      prov = new firebase.auth.FacebookAuthProvider();
+    } else if (provider === 'twitter') {
+      prov = new firebase.auth.TwitterAuthProvider();
+    } else {
+      prov = new firebase.auth.GoogleAuthProvider();
+    }
+
+    const result = await firebase.auth().signInWithPopup(prov);
+    this.setState({user: result.user});
+  }
+
+  async logout() {
+    await firebase.auth().signOut()
+    this.setState({user: null});
+  }
+
+  renderLogin(user) {
+    const userLogged = user === null ? false : true;
+    if (!userLogged) {
+      return (
+        <nav className="photogrid__nav">
+          <ul>
+            <li onClick={() => this.login('facebook')} className="photogrid__nav-item">Log in with Facebook</li>
+            <li onClick={() => this.login('twitter')} className="photogrid__nav-item">Log in with Twitter</li>
+            <li onClick={() => this.login('google')} className="photogrid__nav-item">Log in with Google</li>
+          </ul>
+        </nav>
+      )
+    } else {
+      return (
+        <div className="photogrid__nav">
+          <li>Welcome {this.state.user.displayName}!</li>
+          <li><button className="button button_logout" onClick={() => this.logout()}>Logout</button></li>
+        </div>
+      )
+    }
+  }
+
+  addLikes = (post) => {
+    const posts = {...this.state.posts};
+    const postID = posts[post];
+
+    if (this.state.user) {
+      if (postID.userLiked === false) {
+        postID.likes = postID.likes + 1;
+        postID.userLiked = true;
+      } else {
+        postID.likes = postID.likes - 1;
+        postID.userLiked = false;
+      }
+      
+      this.setState({ posts });
+    }
+  };
+
+  render() {
+    return (
+      <div className="wiztagram"> 
+        <h1 className="wiztagram__title">Wiztagram</h1>
+        { this.renderLogin(this.state.user) }
+        <PhotoGrid posts={this.state.posts} addLikes={this.addLikes} user={this.state.user} showComments={this.showComments} />
+      </div>
+    );
+  }
+}
+
+export default App;
