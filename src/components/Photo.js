@@ -9,15 +9,6 @@ class Photo extends React.Component {
     comments.classList.add('active');
   };
 
-  addComment = (comment) => {
-    if (this.props.details.comments !== undefined) {
-      this.props.details.comments.push(comment);
-    } else {
-      this.props.details['comments'] = [comment];
-    }
-    console.log(this.props.details.comments);
-  };
-
   render() {
     const { details, user } = this.props;
     return (
@@ -29,7 +20,7 @@ class Photo extends React.Component {
           <div onClick={this.props.addLikes} className={`photogrid__item-likes ${user && details.userLiked ? 'photogrid__item-likes_liked' : ''}`}><span role="img" aria-label="Likes">&#10084;</span><span>{details.likes}</span></div>
           <div><span onClick={this.showComments} className="photogrid__item-comments" role="img" aria-label="Comments">&#10000;</span><span>{details.comments !== undefined ? Object.keys(details.comments).length : 0}</span></div>
         </div>
-        <Comments addComment={this.addComment} />
+        <Comments addComment={this.props.addComment} post={this.props.index} comments={this.props.details.comments} />
       </div>
     );
   }

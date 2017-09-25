@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './styles.css';
-import PhotoGrid from './components/PhotoGrid';
+import Photo from './components/Photo';
 import posts from './data';
 import base from './base';
 import firebase from 'firebase';
@@ -88,12 +88,21 @@ class App extends Component {
     }
   };
 
+  addComment = (comment, post) => {
+    const posts = {...this.state.posts};
+
+    posts[post].comments !== undefined ? posts[post].comments.push(comment) : posts[post]['comments'] = [comment];
+    this.setState({ posts });
+  };
+
   render() {
     return (
       <div className="wiztagram"> 
         <h1 className="wiztagram__title">Wiztagram</h1>
         { this.renderLogin(this.state.user) }
-        <PhotoGrid posts={this.state.posts} addLikes={this.addLikes} user={this.state.user} showComments={this.showComments} />
+        <div className="photogrid">
+          { Object.keys(this.state.posts).map((post) => <Photo key={post} index={post} details={this.state.posts[post]} addLikes={() => this.addLikes(post)} user={this.state.user} addComment={this.addComment} />) }
+        </div>
       </div>
     );
   }

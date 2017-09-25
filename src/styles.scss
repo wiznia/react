@@ -1,3 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Oleo+Script');
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  box-sizing: border-box;
+  font-family: 'Oleo Script', cursive;
+}
+
+img {
+  max-width: 100%;
+}
+
 .button {
   background: none;
   border: 0;

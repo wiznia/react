@@ -9,7 +9,7 @@ class Comments extends React.Component {
       comment: this.comment.value
     }
 
-    this.props.addComment(comment);
+    this.props.addComment(comment, this.props.post);
   }
 
   render() {
