@@ -77,15 +77,17 @@ class App extends Component {
 
     if (this.state.user) {
       if (postID.users !== undefined) { 
-        postID.users.forEach((user, i, post) => {
-          if (user.user === this.state.user.uid) {
-            user.userLiked = !user.userLiked;
-          } else {
-            post.push({ userLiked: true, user: this.state.user.uid });
-          }
-        });
+        if (this.state.user.uid in postID.users) {
+          const addRemoveLike = postID.users[this.state.user.uid].userLiked ? postID.likes - 1 : postID.likes + 1;
+          postID.users[this.state.user.uid].userLiked = !postID.users[this.state.user.uid].userLiked;
+          postID.likes = addRemoveLike;
+        } else {
+          postID.users[this.state.user.uid] = { userLiked: true };
+          postID.likes = postID.likes + 1;
+        }
       } else {
-        postID['users'] = [{ userLiked: true, user: this.state.user.uid }];
+        postID['users'] = [];
+        postID['users'][this.state.user.uid] = { userLiked: true };
         postID.likes = postID.likes + 1;
       }
 
