@@ -7,6 +7,7 @@ class Photo extends React.Component {
     const comments = photo.querySelectorAll('.photogrid__item-comment')[0];
 
     comments.classList.add('active');
+    document.querySelector('body').style.overflow = 'hidden';
   };
 
   render() {

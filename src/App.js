@@ -76,14 +76,19 @@ class App extends Component {
     const postID = posts[post];
 
     if (this.state.user) {
-      if (postID.userLiked === false) {
-        postID.likes = postID.likes + 1;
-        postID.userLiked = true;
+      if (postID.users !== undefined) { 
+        postID.users.forEach((user, i, post) => {
+          if (user.user === this.state.user.uid) {
+            user.userLiked = !user.userLiked;
+          } else {
+            post.push({ userLiked: true, user: this.state.user.uid });
+          }
+        });
       } else {
-        postID.likes = postID.likes - 1;
-        postID.userLiked = false;
+        postID['users'] = [{ userLiked: true, user: this.state.user.uid }];
+        postID.likes = postID.likes + 1;
       }
-      
+
       this.setState({ posts });
     }
   };

@@ -32,6 +32,7 @@ class Comments extends React.Component {
 
   hideComments = () => {
     this.commentItem.classList.remove('active');
+    document.querySelector('body').style.overflow = 'auto';
   };
 
   render() {
