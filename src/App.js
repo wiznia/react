@@ -79,6 +79,7 @@ class App extends Component {
       if (postID.users !== undefined) { 
         if (this.state.user.uid in postID.users) {
           const addRemoveLike = postID.users[this.state.user.uid].userLiked ? postID.likes - 1 : postID.likes + 1;
+          
           postID.users[this.state.user.uid].userLiked = !postID.users[this.state.user.uid].userLiked;
           postID.likes = addRemoveLike;
         } else {

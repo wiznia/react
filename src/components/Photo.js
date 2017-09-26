@@ -18,7 +18,7 @@ class Photo extends React.Component {
         <h2 className="photogrid__item-title">{details.title}</h2>
         <p className="photogrid__item-desc">{details.desc}</p>
         <div className="photogrid__item-info">
-          <div onClick={addLikes} className={`photogrid__item-likes ${user && details.userLiked ? 'photogrid__item-likes_liked' : ''}`}><span role="img" aria-label="Likes">&#10084;</span><span>{details.likes}</span></div>
+          <div onClick={addLikes} className={`photogrid__item-likes ${user && details.users && details.users[user.uid] && details.users[user.uid].userLiked ? 'photogrid__item-likes_liked' : ''}`}><span role="img" aria-label="Likes">&#10084;</span><span>{details.likes}</span></div>
           <div><span onClick={this.showComments} className="photogrid__item-comments" role="img" aria-label="Comments">&#10000;<span>{details.comments !== undefined ? Object.keys(details.comments).length : 0}</span></span></div>
         </div>
         <Comments addComment={addComment} post={index} comments={details.comments} hideComments={this.hideComments} />
