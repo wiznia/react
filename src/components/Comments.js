@@ -4,8 +4,8 @@ class Comments extends React.Component {
   addComment(e) {
     e.preventDefault();
     const comment = {
-      name: this.name.value,
-      email: this.email.value,
+      name: this.props.user.displayName || this.name.value,
+      email: this.props.user.email || this.email.value,
       comment: this.comment.value
     }
     
@@ -41,8 +41,12 @@ class Comments extends React.Component {
         <a href="#close" onClick={this.hideComments} className="photogrid__item-comment-close">&#10799;</a>
         <div className="photogrid__item-comment-area">{this.renderComments(this.props.comments)}</div>
         <form className="photogrid__item-comment-form" ref={(form) => {this.form = form}} onSubmit={(e) => this.addComment(e)}>
-          <input className="photogrid__item-comment-form-item" ref={(name) => {this.name = name}} type="text" name="name" placeholder="Name" />
-          <input className="photogrid__item-comment-form-item" ref={(email) => {this.email = email}} type="email" name="email" placeholder="Email" />
+          {!this.props.user &&
+            <div>
+              <input className="photogrid__item-comment-form-item" ref={(name) => {this.name = name}} type="text" name="name" placeholder="Name" />
+              <input className="photogrid__item-comment-form-item" ref={(email) => {this.email = email}} type="email" name="email" placeholder="Email" />
+            </div>
+          }
           <textarea className="photogrid__item-comment-form-item" ref={(comment) => {this.comment = comment}} placeholder="Your comment"></textarea>
           <button className="button_bg photogrid__item-comment-form-item" type="submit">Add Comment</button>
         </form>

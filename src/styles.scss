@@ -149,6 +149,10 @@ img {
   display: flex;
   flex-wrap: wrap;
   flex-basis: calc(50% - 1.25rem);
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .photogrid__item-comment-form-item {
