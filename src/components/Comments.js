@@ -13,19 +13,10 @@ class Comments extends React.Component {
     this.form.reset();
   }
 
-  renderComments(comment) {
-    if (comment === undefined) {
-      return (
-        <p>There are no comments yet, be the first one to comment!</p>
-      )
-    }
+  renderComments(comment, i) {
     return (
-      <div>
-        {
-          comment.map((com, i) => {
-            return <div className="photogrid__item-comment-item" key={i}><span><a href={`mailto:${com.email}`}>{com.name}</a></span><p>{com.comment}</p></div>;
-          })
-        }
+      <div className="photogrid__item-comment-item" key={i}>
+        <span><a href={`mailto:${comment.email}`}>{comment.name}</a></span><p>{comment.comment}</p>
       </div>
     )
   }
@@ -39,7 +30,17 @@ class Comments extends React.Component {
     return (
       <div className="photogrid__item-comment" ref={(commentItem) => {this.commentItem = commentItem}}>
         <a href="#close" onClick={this.hideComments} className="photogrid__item-comment-close">&#10799;</a>
-        <div className="photogrid__item-comment-area">{this.renderComments(this.props.comments)}</div>
+        <div className="photogrid__item-comment-area">
+          {
+            this.props.comments ? (
+              this.props.comments.map((com, i) => {
+                return this.renderComments(com, i);
+              })
+            ) : (
+              <p>There are no comments yet, be the first one to comment!</p>
+            )
+          }
+        </div>
         <form className="photogrid__item-comment-form" ref={(form) => {this.form = form}} onSubmit={(e) => this.addComment(e)}>
           {!this.props.user &&
             <div>
