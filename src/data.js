@@ -5,13 +5,7 @@ const posts = {
     image: 'http://i.istockimg.com/file_thumbview_approve/32135274/5/stock-photo-32135274-cooked-lobster.jpg',
     desc: 'Everyones favorite white fish. We will cut it to the size you need and ship it.',
     likes: 0,
-    comments: [
-      {
-        name: 'Ariel Wiznia',
-        email: 'wiznia@gmail.com',
-        comment: 'Test'
-      }
-    ],
+    comments: [],
     userLiked: false
   },
 

@@ -96,11 +96,23 @@ class App extends Component {
     }
   };
 
-  addComment = (comment, post) => {
+  addComment = (comment, post, timestamp) => {
     const posts = {...this.state.posts};
 
-    posts[post].comments !== undefined ? posts[post].comments.push(comment) : posts[post]['comments'] = [comment];
+    posts[post].comments !== undefined ? posts[post].comments[timestamp] = comment : posts[post]['comments'] = { [timestamp]: comment };
     this.setState({ posts });
+  };
+
+  deleteComment = (comment, post) => {
+    const posts = {...this.state.posts};
+
+    delete posts[post].comments[comment];
+    if (Object.keys(posts[post].comments).length === 0) {
+      delete posts[post].comments;
+    }
+    this.setState({ posts }, () => {
+      console.log('done');
+    });
   };
 
   render() {
@@ -109,7 +121,7 @@ class App extends Component {
         <h1 className="wiztagram__title">Wiztagram</h1>
         { this.renderLogin(this.state.user) }
         <div className="photogrid">
-          { Object.keys(this.state.posts).map((post) => <Photo key={post} index={post} details={this.state.posts[post]} addLikes={() => this.addLikes(post)} user={this.state.user} addComment={this.addComment} />) }
+          { Object.keys(this.state.posts).map((post) => <Photo key={post} index={post} details={this.state.posts[post]} addLikes={() => this.addLikes(post)} posts={this.state.posts} user={this.state.user} addComment={this.addComment} deleteComment={this.deleteComment} />) }
         </div>
       </div>
     );

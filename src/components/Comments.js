@@ -3,20 +3,36 @@ import React from 'react';
 class Comments extends React.Component {
   addComment(e) {
     e.preventDefault();
+    const timestamp = Date.now();
     const comment = {
       name: this.props.user.displayName || this.name.value,
       email: this.props.user.email || this.email.value,
-      comment: this.comment.value
+      comment: this.comment.value,
+      user: this.props.user.uid || '',
+      commentID: timestamp
     }
     
-    this.props.addComment(comment, this.props.post);
+    this.props.addComment(comment, this.props.post, timestamp);
     this.form.reset();
+  }
+
+  deleteComment(comment, post) {
+    let cID;
+    for (cID in this.props.posts[this.props.post].comments) {
+      if (this.props.posts[this.props.post].comments[cID].commentID === comment.commentID) {
+        this.props.deleteComment(comment.commentID, post);
+      }
+    }
   }
 
   renderComments(comment, i) {
     return (
       <div className="photogrid__item-comment-item" key={i}>
-        <span><a href={`mailto:${comment.email}`}>{comment.name}</a></span><p>{comment.comment}</p>
+        { this.props.user && (this.props.user.uid === comment.user) &&
+          <a onClick={() => this.deleteComment(comment, this.props.post)} href="#deleteComment" className="photogrid__item-comment-delete">&#10799;</a>
+        }
+        <span><a href={`mailto:${comment.email}`}>{comment.name}</a></span>
+        <p>{comment.comment}</p>
       </div>
     )
   }
@@ -32,9 +48,9 @@ class Comments extends React.Component {
         <a href="#close" onClick={this.hideComments} className="photogrid__item-comment-close">&#10799;</a>
         <div className="photogrid__item-comment-area">
           {
-            this.props.comments ? (
-              this.props.comments.map((com, i) => {
-                return this.renderComments(com, i);
+            this.props.comments !== undefined ? (
+              Object.keys(this.props.comments).map((key, i) => {
+                return this.renderComments(this.props.comments[key], i);
               })
             ) : (
               <p>There are no comments yet, be the first one to comment!</p>
